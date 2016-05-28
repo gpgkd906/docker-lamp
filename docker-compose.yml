@@ -1,16 +1,47 @@
 version: '2'
 
 services:
-  webserver:
+  load_balancer:
+    image: nginx:1.11.0
+    container_name: load_balancer
+    volumes:
+      - ./var/nginx/conf:/etc/nginx/conf.d/
+      - ./var/nginx/log:/var/log/nginx
+    ports:
+      - "80:80"
+      - "433:433"
+    links:
+      - webserver1
+      - webserver2
+      - webserver3
+  webserver1:
     image: httpd:2.4.20
-    container_name: webserver
+    expose:
+      - "8000"
     volumes:
       - ./var/httpd/conf:/usr/local/apache2/conf/
       - ./var/httpd/logs:/usr/local/apache2/logs/
       - ./var/application:/usr/local/apache2/htdocs/
-    ports:
-      - "80:80"
-      - "433:433"
+    links:
+      - php_server
+  webserver2:
+    image: httpd:2.4.20
+    expose:
+      - "8000"
+    volumes:
+      - ./var/httpd/conf:/usr/local/apache2/conf/
+      - ./var/httpd/logs:/usr/local/apache2/logs/
+      - ./var/application:/usr/local/apache2/htdocs/
+    links:
+      - php_server
+  webserver3:
+    image: httpd:2.4.20
+    expose:
+      - "8000"
+    volumes:
+      - ./var/httpd/conf:/usr/local/apache2/conf/
+      - ./var/httpd/logs:/usr/local/apache2/logs/
+      - ./var/application:/usr/local/apache2/htdocs/
     links:
       - php_server
   php_server:
