@@ -1,0 +1,41 @@
+version: '2'
+
+services:
+  webserver:
+    image: httpd:2.4.20
+    container_name: webserver
+    volumes:
+      - ./var/httpd/conf:/usr/local/apache2/conf/
+      - ./var/httpd/logs:/usr/local/apache2/logs/
+      - ./var/application:/usr/local/apache2/htdocs/
+    ports:
+      - "80:80"
+      - "433:433"
+    links:
+      - php_server
+  php_server:
+    image: php:7.0.6-fpm
+    volumes:
+      - ./var/php-fpm/conf:/usr/local/etc/php-fpm.d/
+      - ./var/php-fpm/log:/usr/local/log/
+      - ./var/application:/application/
+    container_name: php_server
+    links:
+      - db
+      - cache_server1
+      - cache_server2
+  db:
+    image: mysql:5.7.12
+    volumes:
+      - ./var/mysql/lib:/var/lib/mysql
+    container_name: db
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_ROOT_PASSWORD: 
+      MYSQL_DATABASE: web_applcation
+  cache_server1:
+    image: memcached:1.4.25
+    container_name: cache_server1
+  cache_server2:
+    image: memcached:1.4.25
+    container_name: cache_server2
