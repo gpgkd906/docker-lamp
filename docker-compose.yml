@@ -1,72 +1,52 @@
-version: '2'
-
-services:
-  load_balancer:
-    image: nginx:1.11.0
-    container_name: load_balancer
-    volumes:
-      - ./var/nginx/conf:/etc/nginx/conf.d/
-      - ./var/nginx/log:/var/log/nginx
-    ports:
-      - "80:80"
-      - "433:433"
-    links:
-      - webserver1
-      - webserver2
-      - webserver3
-  webserver1:
-    image: httpd:2.4.20
-    expose:
-      - "8000"
-    volumes:
-      - ./var/httpd/conf:/usr/local/apache2/conf/
-      - ./var/httpd/logs:/usr/local/apache2/logs/
-      - ./var/application:/usr/local/apache2/htdocs/
-    links:
-      - php_server
-  webserver2:
-    image: httpd:2.4.20
-    expose:
-      - "8000"
-    volumes:
-      - ./var/httpd/conf:/usr/local/apache2/conf/
-      - ./var/httpd/logs:/usr/local/apache2/logs/
-      - ./var/application:/usr/local/apache2/htdocs/
-    links:
-      - php_server
-  webserver3:
-    image: httpd:2.4.20
-    expose:
-      - "8000"
-    volumes:
-      - ./var/httpd/conf:/usr/local/apache2/conf/
-      - ./var/httpd/logs:/usr/local/apache2/logs/
-      - ./var/application:/usr/local/apache2/htdocs/
-    links:
-      - php_server
-  php_server:
-    image: php:7.0.6-fpm
-    volumes:
-      - ./var/php-fpm/conf:/usr/local/etc/php-fpm.d/
-      - ./var/php-fpm/log:/usr/local/log/
-      - ./var/application:/application/
-    container_name: php_server
-    links:
-      - db
-      - cache_server1
-      - cache_server2
-  db:
-    image: mysql:5.7.12
-    volumes:
-      - ./var/mysql/lib:/var/lib/mysql
-    container_name: db
-    environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-      MYSQL_ROOT_PASSWORD: 
-      MYSQL_DATABASE: web_applcation
-  cache_server1:
-    image: memcached:1.4.25
-    container_name: cache_server1
-  cache_server2:
-    image: memcached:1.4.25
-    container_name: cache_server2
+load_balancer:
+  image: nginx:1.11.0
+  container_name: load_balancer
+  volumes:
+    - ./var/nginx/conf:/etc/nginx/conf.d/
+    - ./var/nginx/log:/var/log/nginx
+    - ./var/ssl:/etc/nginx/ssl
+  ports:
+    - "80:80"
+    - "443:443"
+  links:
+    - webserver1
+    - webserver2
+webserver1:
+  image: httpd:2.4.20
+  volumes:
+    - ./var/httpd/conf:/usr/local/apache2/conf/
+    - ./var/httpd/logs:/usr/local/apache2/logs/
+    - ./var/application:/application/
+  links:
+    - php_server
+webserver2:
+  image: httpd:2.4.20
+  volumes:
+    - ./var/httpd/conf:/usr/local/apache2/conf/
+    - ./var/httpd/logs:/usr/local/apache2/logs/
+    - ./var/application:/application/
+  links:
+    - php_server
+php_server:
+  build: ./var/php-fpm/dockerfile/php7
+  volumes:
+    - ./var/php-fpm/conf:/usr/local/etc/php-fpm.d/
+    - ./var/php-fpm/log:/usr/local/log/
+    - ./var/application:/application/
+  container_name: php_server
+  links:
+    - db
+    - cache_server1
+    - cache_server2
+db:
+  build: ./var/mysql/dockerfile
+  volumes:
+    - ./var/mysql/lib:/var/lib/mysql
+    - ./var/mysql/conf:/etc/mysql
+  container_name: db
+cache_server1:
+  image: memcached:1.4.25
+  container_name: cache_server1
+cache_server2:
+  image: memcached:1.4.25
+  container_name: cache_server2
