@@ -1,0 +1,6 @@
+#!/bin/sh
+
+cp $HOME/.docker/docker-compose.yml ./
+cp $HOME/.docker/README.md ./
+cp -r $HOME/.docker/var ./var
+docker-clearlog

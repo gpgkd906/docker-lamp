@@ -1,0 +1,16 @@
+#!/bin/sh
+
+cat /dev/null > var/mysql/log/query.log
+cat /dev/null > var/mysql/log/mysql-error.log
+cat /dev/null > var/php-fpm/log/fpm-php.www.log
+cat /dev/null > var/php-fpm/log/www.access.log
+cat /dev/null > var/httpd/logs/access-eccube-local.log
+cat /dev/null > var/httpd/logs/access-es-docker-local.log
+cat /dev/null > var/httpd/logs/error-es-docker-local.log
+cat /dev/null > var/httpd/logs/error-eccube-local.log
+cat /dev/null > var/nginx/log/access.log
+cat /dev/null > var/nginx/log/access_log
+cat /dev/null > var/nginx/log/error.log
+cat /dev/null > var/nginx/log/error_log
+cat /dev/null > var/nginx/log/ssl_access_log
+cat /dev/null > var/nginx/log/ssl_error_log
