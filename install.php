@@ -31,7 +31,9 @@ system("cp -R $installDir/* $dockerDir");
 // add bin_path to bash_config
 $bash_config_content = file_get_contents($bash_config);
 
-$bash_config_content .= PHP_EOL;
-$bash_config_content .= 'export PATH="$HOME/.docker/bin:$PATH"';
-
-file_put_contents($bash_config, $bash_config_content);
+$export = 'export PATH="$HOME/.docker/bin:$PATH"';
+if (strpos($bash_config_content, $export) === false) {
+    $bash_config_content .= PHP_EOL;
+    $bash_config_content .= $export
+    file_put_contents($bash_config, $bash_config_content);
+}
