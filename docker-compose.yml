@@ -16,7 +16,7 @@ webserver1:
   volumes:
     - ./var/httpd/conf:/usr/local/apache2/conf/
     - ./var/httpd/logs:/usr/local/apache2/logs/
-    - ./var/application:/application/
+    - ./application:/application/
   links:
     - php_server
 webserver2:
@@ -24,7 +24,7 @@ webserver2:
   volumes:
     - ./var/httpd/conf:/usr/local/apache2/conf/
     - ./var/httpd/logs:/usr/local/apache2/logs/
-    - ./var/application:/application/
+    - ./application:/application/
   links:
     - php_server
 php_server:
@@ -32,17 +32,20 @@ php_server:
   volumes:
     - ./var/php-fpm/conf:/usr/local/etc/php-fpm.d/
     - ./var/php-fpm/log:/usr/local/log/
-    - ./var/application:/application/
+    - ./application:/application/
   container_name: php_server
   links:
     - db
     - cache_server1
     - cache_server2
+    - mail_server
+    - redis_server
 db:
   build: ./var/mysql/dockerfile
   volumes:
     - ./var/mysql/lib:/var/lib/mysql
     - ./var/mysql/conf:/etc/mysql
+    - ./var/mysql/log:/var/log/mysql
   container_name: db
 cache_server1:
   image: memcached:1.4.25
@@ -50,3 +53,15 @@ cache_server1:
 cache_server2:
   image: memcached:1.4.25
   container_name: cache_server2
+mail_server:
+  image: tozd/postfix
+  container_name: mail_server
+  volumes:
+    - ./var/postfix/spool/postfix:/var/spool/postfix
+redis_server:
+  image: redis:3.2.3
+  ports:
+    - "6379:6379"
+  volumes:
+    - ./var/redis/data:/data/
+  container_name: redis_server

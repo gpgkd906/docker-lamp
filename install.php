@@ -2,7 +2,7 @@
 
 $installDir = realpath(__DIR__);
 
-$userHome = system('echo $HOME') . '/';
+$userHome = getenv('HOME') . '/';
 // find bash_config
 $bash_rc = '.bash_rc';
 $bash_profile = '.bash_profile';
