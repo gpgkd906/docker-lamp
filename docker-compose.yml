@@ -42,6 +42,8 @@ php_server:
     - redis_server
 db:
   build: ./var/mysql/dockerfile
+  ports:
+    - "3306:3306"
   volumes:
     - ./var/mysql/lib:/var/lib/mysql
     - ./var/mysql/conf:/etc/mysql
