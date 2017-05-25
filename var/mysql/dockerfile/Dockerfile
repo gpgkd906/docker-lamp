@@ -1,7 +1,7 @@
 #baseimageはMysqlオフィシャルimageを利用する
 #tag 5.6はRed Hat Enterprise Linux Server release 7.2に基づいている
 FROM mysql/mysql-server:5.7
-MAINTAINER Chen Han <chen@kdl.co.jp>
+MAINTAINER Chen Han <gpgkd906@gmail.com>
 #環境変数設定
 #ランダムにrootパスワード生成
 ENV MYSQL_RANDOM_ROOT_PASSWORD=yes
