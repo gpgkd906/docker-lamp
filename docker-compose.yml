@@ -33,6 +33,7 @@ php_server:
     - ./var/php-fpm/conf:/usr/local/etc/php-fpm.d/
     - ./var/php-fpm/log:/usr/local/log/
     - ./application:/application/
+    - ./var/php-fpm/ini/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
   container_name: php_server
   links:
     - db
