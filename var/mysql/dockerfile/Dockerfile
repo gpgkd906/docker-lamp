@@ -8,6 +8,6 @@ ENV MYSQL_RANDOM_ROOT_PASSWORD=yes
 #rootパスワードは一回切りで無効になる(設定完了後無効になる)
 ENV MYSQL_ONETIME_PASSWORD=yes
 #以下、非rootユーザー設定になる
-ENV MYSQL_DATABASE=docker_db
+ENV MYSQL_DATABASE=docker
 ENV MYSQL_USER=docker
 ENV MYSQL_PASSWORD=docker

@@ -34,6 +34,6 @@ $bash_config_content = file_get_contents($bash_config);
 $export = 'export PATH="$HOME/.docker/bin:$PATH"';
 if (strpos($bash_config_content, $export) === false) {
     $bash_config_content .= PHP_EOL;
-    $bash_config_content .= $export
+    $bash_config_content .= $export;
     file_put_contents($bash_config, $bash_config_content);
 }
